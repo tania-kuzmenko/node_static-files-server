@@ -14,7 +14,7 @@ function createServer() {
       res.statusCode = 400;
       res.setHeader('Content-Type', 'text/plain');
 
-      res.end('Dinied');
+      res.end('Denied');
 
       return;
     }
