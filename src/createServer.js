@@ -10,17 +10,35 @@ function createServer() {
   return http.createServer(async (req, res) => {
     const normalizedUrl = new url.URL(req.url, `http://${req.headers.host}`);
 
+    if (req.url.includes('..')) {
+      res.statusCode = 400;
+      res.setHeader('Content-Type', 'text/plain');
+
+      res.end('Dinied');
+
+      return;
+    }
+
     const fileName =
       !normalizedUrl.pathname.slice(5) ||
       normalizedUrl.pathname.slice(5) === '/'
         ? 'index.html'
-        : normalizedUrl.pathname.sle(6);
+        : normalizedUrl.pathname.slice(6);
 
     if (fileName.includes('//')) {
       res.statusCode = 404;
       res.setHeader('Content-Type', 'text/plain');
 
       res.end('Dont use // in the path');
+
+      return;
+    }
+
+    if (fileName.includes('/../')) {
+      res.statusCode = 400;
+      res.setHeader('Content-Type', 'text/plain');
+
+      res.end('Denied');
 
       return;
     }
